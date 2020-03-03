@@ -15,9 +15,7 @@ public class CensusAnalyser {
     public int loadIndiaCensusData(String csvFilePath) throws CensusAnalyserException {
         try( Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             Iterator<IndiaCensusCSV> censusCSVIterator = getCsvFileIterator(reader, IndiaCensusCSV.class);
-            Iterable<IndiaCensusCSV>  csvIterable = () -> censusCSVIterator;
-            int numOfEateries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
-            return numOfEateries;
+            return returnCount(censusCSVIterator);
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -33,6 +31,13 @@ public class CensusAnalyser {
 
     }
 
+    private <E> int returnCount(Iterator<E> censusCSVIterator) {
+        Iterable<E>  csvIterable = () -> censusCSVIterator;
+        int numOfEateries = (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
+        return numOfEateries;
+
+    }
+
     private <T>  Iterator<T> getCsvFileIterator(Reader reader, Class csvClass) {
         CsvToBeanBuilder<T> csvToBeanBuilder = new CsvToBeanBuilder<>(reader);
         csvToBeanBuilder.withType(csvClass);
@@ -43,10 +48,9 @@ public class CensusAnalyser {
 
     public int loadIndiaStateCode(String csvFilePath) throws CensusAnalyserException {
         try( Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
-
             Iterator<IndiaStateCodeCsv> censusCSVIterator = getCsvFileIterator(reader, IndiaStateCodeCsv.class);
-            Iterable<IndiaStateCodeCsv>  csvIterable = () -> censusCSVIterator;
-            return (int) StreamSupport.stream(csvIterable.spliterator(), false).count();
+            return returnCount(censusCSVIterator);
+
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
@@ -57,5 +61,5 @@ public class CensusAnalyser {
         }
 
     }
-    
+
 }
