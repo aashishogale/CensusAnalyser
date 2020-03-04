@@ -15,12 +15,12 @@ public class CensusAnalyser  {
     public int loadIndiaCensusData(String csvFilePath)  throws CensusAnalyserException  {
         try( Reader reader = Files.newBufferedReader(Paths.get(csvFilePath));) {
             ICsvBuilder icvbuilder = CsvBuilderFactory.getCsvBuilder();
-            return returnCount(icvbuilder.getCsvFileIterator(reader, IndiaCensusCSV.class));
+            return icvbuilder.getCsvFileList(reader, IndiaCensusCSV.class).size();
         } catch (IOException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
-        catch (IllegalStateException e) {
+        catch (CSVBuilderException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
         }
@@ -55,7 +55,7 @@ public class CensusAnalyser  {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.CENSUS_FILE_PROBLEM);
         }
-        catch (IllegalStateException e) {
+        catch (CSVBuilderException e) {
             throw new CensusAnalyserException(e.getMessage(),
                     CensusAnalyserException.ExceptionType.UNABLE_TO_PARSE);
         }
