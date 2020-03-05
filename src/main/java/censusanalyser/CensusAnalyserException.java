@@ -1,9 +1,11 @@
 package censusanalyser;
 
+import java.util.InputMismatchException;
+
 public class CensusAnalyserException extends Exception {
 
     enum ExceptionType {
-        CENSUS_FILE_PROBLEM, UNABLE_TO_PARSE
+        CENSUS_FILE_PROBLEM, UNABLE_TO_PARSE,ILLEGAL_MATCH, NO_CENSUS_DATA
     }
 
     ExceptionType type;
@@ -18,3 +20,4 @@ public class CensusAnalyserException extends Exception {
         this.type = type;
     }
 }
+
